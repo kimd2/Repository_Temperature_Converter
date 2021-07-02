@@ -97,7 +97,7 @@ class Converter:
         result = number_checker(temperature_entry_number)
         valid = False
         while not valid:
-            if result:
+            if result or result == 0:
                 if not check:
                     self.error_message.grid_remove()
                 valid = True
