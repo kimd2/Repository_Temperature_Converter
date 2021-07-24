@@ -32,7 +32,7 @@ class Converter:
                                           font=("Garamond", "16", "bold"),
                                           bg=background_color)
         self.temp_converter_label.grid(row=0,
-                                       columnspan=3,
+                                       columnspan=5,
                                        padx=10,
                                        pady=10)
 
@@ -42,14 +42,15 @@ class Converter:
                                                  font=("Garamond", "16", "bold"),
                                                  bg=background_color)
         self.converter_description_label.grid(row=1,
-                                              columnspan=3,
+                                              columnspan=5,
                                               padx=10,
                                               pady=10)
 
         # Variable identification (Row 3)
         self.error_message = Label(self.converter_frame,
                                    text="Please enter a number above -273.15ºC or -459.67ºF!",
-                                   font=("Garamond", "14"),
+                                   font=("Garamond", "14", "bold"),
+                                   fg= "red",
                                    bg="light pink",
                                    pady=5)
         global from_variable
@@ -67,38 +68,38 @@ class Converter:
                                        bg=background_color,
                                        pady=5)
         self.to_variable_label.grid(row=3,
-                                    column=2)
+                                    column=4)
 
         # Converter input box and change direction button (Row 4)
         global temperature_entry, check
         temperature_entry = Entry(self.converter_frame, bd=2)
-        temperature_entry.grid(row=4, column=0, padx=10, pady=5)
+        temperature_entry.grid(row=4, column=0, pady=5)
         check = True
         self.change_temp_button = Button(self.converter_frame, text="Change Conversion Direction",
-                                         font=("Garamond", "14"), command=self.change_direction)
-        self.change_temp_button.grid(row=4, column=1, padx=10, pady=5)
+                                         font=("Garamond", "14"), command=self.change_direction, bg="mistyrose")
+        self.change_temp_button.grid(row=4, column=1, columnspan=3, padx=10, pady=5)
         self.temperature_label = Label(self.converter_frame, text="", font=("Garamond", "14"), width=10, pady=5,
                                        bg="mistyrose")
-        self.temperature_label.grid(row=4, column=2, padx=10)
+        self.temperature_label.grid(row=4, column=4, padx=10)
 
         # Convert button (Row 5)
         self.convert_button = Button(self.converter_frame, text="Convert", font=("Garamond", "14", "bold"),
-                                     command=self.convert)
-        self.convert_button.grid(row=5, column=1, padx=10, pady=5)
+                                     command=self.convert, bg="mistyrose")
+        self.convert_button.grid(row=5, column=1, columnspan=3, padx=10, pady=5)
 
         # Help Button (Row 6)
         self.help_button = Button(self.converter_frame, text="Help", font=("Garamond", "14"),
-                                  command=self.help)
-        self.help_button.grid(row=6, column=1, padx=10, pady=5)
+                                  command=self.help, padx=10, bg="mistyrose")
+        self.help_button.grid(row=6, column=2, pady=5, padx=5)
 
         # History Button (Row 7)
         self.history_button = Button(self.converter_frame, text="History", font=("Garamond", "14"),
-                                     command=self.history)
-        self.history_button.grid(row=7, column=1, padx=10, pady=5)
+                                     command=self.history, bg="mistyrose")
+        self.history_button.grid(row=6, column=1, padx=5, pady=5)
 
         # Dismiss Button (Row 8)
-        self.dismiss_button = Button(self.converter_frame, text="Exit", font=("Garamond", "14"), command=self.close_main)
-        self.dismiss_button.grid(row=8, column=1, padx=10, pady=5)
+        self.dismiss_button = Button(self.converter_frame, text="Exit", padx=10, font=("Garamond", "14"), command=self.close_main, bg="mistyrose")
+        self.dismiss_button.grid(row=6, column=3, pady=5, padx=5)
 
     # Create command for help button
     def help(self):
@@ -157,7 +158,7 @@ class Converter:
         self.from_variable_label.grid(row=3, column=0)
         self.to_variable_label = Label(self.converter_frame, text=to_variable, font=("Garamond", "14"),
                                        bg=background_color, pady=5, padx=20)
-        self.to_variable_label.grid(row=3, column=2)
+        self.to_variable_label.grid(row=3, column=4)
 
     # Command to close main frame
     def close_main(self):
@@ -181,11 +182,11 @@ class Converter:
                 check = True
             else:
                 if check:
-                    self.error_message.grid(row=2, columnspan=3)
+                    self.error_message.grid(row=2, columnspan=5)
                     check = False
                 self.conversion_label = Label(self.converter_frame, text="Invalid", font=("Garamond", "14"),
                                               bg="misty rose", pady=5, width=10)
-                self.conversion_label.grid(row=4, column=2)
+                self.conversion_label.grid(row=4, column=4)
                 break
         if valid:
             if from_variable == "Celsius":
@@ -198,7 +199,7 @@ class Converter:
                 conversions.insert(0, "{}°F  >>  {}°C".format(result, converted))
             self.conversion_label = Label(self.converter_frame, text=converted, font=("Garamond", "14"),
                                           bg="misty rose", width=10, pady=5)
-            self.conversion_label.grid(row=4, column=2)
+            self.conversion_label.grid(row=4, column=4)
             print(converted)
 
 
@@ -279,8 +280,11 @@ class History:
         self.dismiss_button.grid(row=3, pady=5)
 
         # Set up export button (Row 2)
-        self.export_button = Button(self.history_frame, text="Export", font=("Garamond", "14"), bg="salmon", padx=10, command=self.export)
-        self.export_button.grid(row=2, pady=5)
+        global conversions
+        print(conversions)
+        if conversions:
+            self.export_button = Button(self.history_frame, text="Export", font=("Garamond", "14"), bg="salmon", padx=10, command=self.export)
+            self.export_button.grid(row=2, pady=5)
 
     def export(self):
         print("Export window opened")
@@ -338,13 +342,13 @@ class Export:
         global file_name_entry, var, error_count
         error_count = 0
         file_name_entry = Entry(self.export_frame, bd=2, width=40)
-        file_name_entry.grid(row=3, columnspan=2, padx=10, pady=5)
+        file_name_entry.grid(row=3, columnspan=2, padx=10, pady=5, sticky=E)
 
         # Set up export option
         var = IntVar()
         export_option_check = Checkbutton(self.export_frame, text="Export last 10 conversions only (If left unchecked, all conversions will be exported)", bg=background,
                                           font=("Garamond", "14"), variable=var)
-        export_option_check.grid(row=5, columnspan=2)
+        export_option_check.grid(row=5, columnspan=2, padx=30)
 
         # Set up Dismiss and export button (button, row 4)
         self.dismiss_button = Button(self.export_frame, text="Dismiss", font=("Garamond", "14"), bg="salmon", padx=10,
@@ -365,41 +369,67 @@ class Export:
         filename = file_name_entry.get()
         last_ten = var.get()
         valid = "[A-Za-z0-9_]"
+        characters = ""
         if filename:
+            errors = []
             for letter in filename:
                 if re.match(valid, letter):
-                    error = ""
                     continue
-                elif letter == " ":
-                    error = "No spaces allowed!"
-                    print("Invalid, '{}'".format(letter))
-                    break
                 else:
-                    error = "The character '{}' is not allowed!".format(letter)
-                    print("Invalid, '{}'".format(letter))
-                    break
+                    errors.append(letter)
+            if " " in errors:
+                errors.remove(" ")
+                if errors:
+                    errors = dict.fromkeys(errors)
+                    errors = list(errors)
+                    for number in range(0, len(errors)):
+                        characters = characters + " " + errors[number]
+                    error = "Spaces and the characters{} are not allowed!".format(characters)
+                else:
+                    error = "No spaces allowed!"
+                    characters = "Space"
+                print("Invalid, '{}'".format(characters))
+            else:
+                if len(errors) == 1:
+                    error = "The character '{}' is not allowed!".format(errors[0])
+                    print("Invalid, '{}'".format(errors[0]))
+                elif not errors:
+                    error = False
+                else:
+                    errors = dict.fromkeys(errors)
+                    errors = list(errors)
+                    characters = ""
+                    for number in range(0, len(errors)):
+                        characters = characters + " " + errors[number]
+                    error = "The characters{} are not allowed!".format(characters)
+                    print("Invalid, {}".format(characters))
         else:
             error = "Please enter a valid file name."
+        global error_label
         if error and error_count == 0:
             error_label = Label(self.export_frame, text=error,
-                            font=("Garamond", "14"),
-                            bg="mistyrose", padx=30)
+                                font=("Garamond", "14", "bold"),
+                                fg="red",
+                                bg="mistyrose", padx=10)
             error_label.grid(row=4, columnspan=2)
             error_count = 1
             print("New error. {}".format(error))
             filename_validity = False
         elif error and error_count == 1:
+            error_label.destroy()
             error_label = Label(self.export_frame, text=error,
-                            font=("Garamond", "14"),
-                            bg="mistyrose", padx=30)
+                                font=("Garamond", "14", "bold"),
+                                fg="red",
+                                bg="mistyrose", padx=10)
             error_label.grid(row=4, columnspan=2)
             print("Error. {}".format(error))
             filename_validity = False
             error_count = 1
         elif not error and error_count == 1:
+            error_label.destroy()
             error_label = Label(self.export_frame, text="File successfully written!",
-                            font=("Garamond", "14"),
-                            bg="mistyrose", padx=30)
+                                font=("Garamond", "14"),
+                                bg="mistyrose", padx=10)
             error_label.grid(row=4, columnspan=2)
             print("Error cleared.")
             error_count = 0
@@ -407,16 +437,15 @@ class Export:
         else:
             error_count = 0
             error_label = Label(self.export_frame, text="File successfully written!",
-                            font=("Garamond", "14"),
-                            bg="mistyrose", padx=30)
-            error_label.grid(row=4, columnspan=2)
+                                font=("Garamond", "14"),
+                                bg="mistyrose")
+            error_label.grid(row=4, columnspan=2, padx=10)
             filename_validity = True
             print("No error file written")
         if filename_validity:
             # Create file
             filename = filename + ".txt"
             export = open(filename, "w+")
-
 
             # Write file according to option
             if last_ten:
